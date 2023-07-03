@@ -1,9 +1,14 @@
 """
 This file contains the pytest tests for the markdown_helper.py file.
 """
-
-from src import markdown_helper as markdown
-
+try:
+    from src import markdown_helper as markdown
+except ModuleNotFoundError:
+    try:
+        import markdown_helper as markdown
+    except ModuleNotFoundError:
+        from ..src import markdown_helper as markdown # type: ignore
+       
 def test_ordered_list():
     """
     This function tests the markdown.List class.
