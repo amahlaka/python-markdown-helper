@@ -7,8 +7,7 @@ except ModuleNotFoundError:
     try:
         import markdown_helper as markdown
     except ModuleNotFoundError:
-        from ..src import markdown_helper as markdown # type: ignore
-       
+        from ..src import markdown_helper as markdown # pylint: disable=import-error, relative-beyond-top-level
 def test_ordered_list():
     """
     This function tests the markdown.List class.

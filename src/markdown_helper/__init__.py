@@ -62,7 +62,7 @@ class Table:
         for header, value_map in self.custom_map.items():
             for row in self.rows:
                 row[header] = value_map.get(row[header], row[header])
-    
+
     def add_rows(self, rows: list[dict[str, str | int | float | bool]]):
         """Add multiple rows to the table.
         
@@ -395,7 +395,7 @@ class Document:
             raise TypeError(
                 f"Section must be of type Section or str, not {type(section)}"
             )
-        
+
         self.sections[new_section.title.text] = new_section
         return new_section
 
