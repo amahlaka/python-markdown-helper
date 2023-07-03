@@ -28,7 +28,7 @@ class Header:
     def __str__(self):
         """Return the header as a string."""
         return "#" * self.level + " " + self.text
-    
+
     def __repr__(self):
         """Return the header as a string."""
         return "#" * self.level + " " + self.text
@@ -45,9 +45,6 @@ class Table:
         Keyword Args:
             title (str): Title for the table
             flexible_headers (bool): If True, allow headers to be added dynamically
-            total_row (bool): If True, add a total row to the table
-            total_row_label (str): Label for the total row
-            sort (bool): If True, sort the table by the sort_key
             sort_reverse (bool): If True, sort the table in reverse order
             sort_key (str): Key to sort the table by
             custom_map (dict): Custom map to remap values in the table
@@ -55,9 +52,6 @@ class Table:
         self.headers = headers
         self.rows: list[dict[str, str | int | float | bool]] = []
         self.flexible_headers = kwargs.get("flexible_headers", False)
-        self.total_row = kwargs.get("total_row", False)
-        self.total_row_label = kwargs.get("total_row_label", "Total")
-        self.sort = kwargs.get("sort", False)
         self.sort_reverse = kwargs.get("sort_reverse", False)
         self.sort_key = kwargs.get("sort_key", "")
         self.custom_map: dict = kwargs.get("custom_map", False)
@@ -94,7 +88,7 @@ class Table:
             # If multiple sort keys are provided, prioritize the first one, then the second, etc.
             sort_keys = self.sort_key.split(",")
             for sort_key in sort_keys:
-                if all(
+                if all( # pylint: disable=use-a-generator
                     [
                         row.get(sort_key, "")
                         in [1, 0, False, True, "False", "True", "false", "true"]
@@ -139,7 +133,7 @@ class Table:
 
     def get_table(self) -> str:
         """Generate the table."""
-        if self.sort:
+        if self.sort_key:
             self.sort_table()
         if self.custom_map:
             self.remap()
@@ -151,19 +145,19 @@ class Table:
         table += f"| {' | '.join(['---' for _ in self.headers])} |\n"
         for row in self.rows:
             table += f"| {' | '.join([str(row.get(header, '')) for header in self.headers])} |\n"
-        if self.total_row:
-            total_row = {}
-            for header in self.headers:
-                if header == self.total_row_label:
-                    total_row[header] = "Total"
-                else:
-                    try:
-                        total_row[header] = sum(
-                            [int(row.get(header, 0)) for row in self.rows]
-                        )
-                    except ValueError:
-                        total_row[header] = ""
-            table += f"| {' | '.join([str(total_row.get(header, '')) for header in self.headers])} |\n" # pylint: disable=line-too-long
+        # if self.total_row:
+        #     total_row = {}
+        #     for header in self.headers:
+        #         if header == self.total_row_label:
+        #             total_row[header] = "Total"
+        #         else:
+        #             try:
+        #                 total_row[header] = sum(
+        #                     [int(row.get(header, 0)) for row in self.rows]
+        #                 )
+        #             except ValueError:
+        #                 total_row[header] = ""
+        #     table += f"| {' | '.join([str(total_row.get(header, '')) for header in self.headers])} |\n" # pylint: disable=line-too-long
         return table
 
     def __str__(self):
@@ -205,7 +199,7 @@ class Image:
         if self.caption:
             image += f'<br><i>{self.caption}</i>'
         return image
-    
+
     def markdown(self):
         """Generate the markdown for the image."""
         image = ""
@@ -219,8 +213,7 @@ class Image:
     def __str__(self):
         if any([self.width, self.height, self.align]):
             return self.html()
-        else:
-            return self.markdown()
+        return self.markdown()
     def __repr__(self):
         return f"""Image(url={self.url}, title={self.title}, alt={self.alt},
           width={self.width}, height={self.height}, align={self.align}, caption={self.caption})"""
