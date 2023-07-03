@@ -62,9 +62,22 @@ class Table:
         for header, value_map in self.custom_map.items():
             for row in self.rows:
                 row[header] = value_map.get(row[header], row[header])
+    
+    def add_rows(self, rows: list[dict[str, str | int | float | bool]]):
+        """Add multiple rows to the table.
+        
+        Args:
+            rows (list[dict[str, str | int | float | bool]]): List of rows to add
+        """
+        for row in rows:
+            self.add_row(row)
 
     def add_row(self, row: dict[str, str | int | float | bool]):
-        """Add a row to the table."""
+        """Add a row to the table.
+        
+        Args:
+            row (dict[str, str | int | float | bool]): Row to add
+        """
 
         # Check that all the keys in the row are in the headers
         for key in row.keys():
@@ -368,13 +381,23 @@ class Document:
                 raise ValueError(f"File {filename} already exists")
         self.filename = filename
 
-    def add_section(self, section: Section):
+    def add_section(self, section: Section | str):
         """Add a section to the document.
 
         Args:
             section (Section): Section to add to the document.
         """
-        self.sections[section.title.text] = section
+        if isinstance(section, str):
+            new_section = Section(section)
+        elif isinstance(section, Section):
+            new_section = section
+        else:
+            raise TypeError(
+                f"Section must be of type Section or str, not {type(section)}"
+            )
+        
+        self.sections[new_section.title.text] = new_section
+        return new_section
 
     def get_document(self) -> str:
         """Get the document as a string."""
@@ -383,14 +406,16 @@ class Document:
             document += "## Table of Contents\n"
             for section in self.sections.values():
                 document += (
-                    f"* [{section.title}](#{section.title.text.lower().replace(' ', '-')})\n"
+                    f"* [{section.title.text}](#{section.title.text.lower().replace(' ', '-')})\n"
                 )
         for section in self.sections.values():
             document += str(section)
         return document
 
-    def save(self):
+    def save(self, **kwargs):
         """Save the document to a file."""
+        if kwargs.get("filename"):
+            self.filename = kwargs.get("filename", "")
         with open(self.filename, "w", encoding="utf-8") as file_output:
             file_output.write(self.get_document())
 

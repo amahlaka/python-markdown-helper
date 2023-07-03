@@ -10,5 +10,10 @@
     "python.analysis.fixAll": [
     "source.unusedImports",
     "source.convertImportFormat",
-    ]
+    ],
+    "python.testing.pytestArgs": [
+        "tests"
+    ],
+    "python.testing.unittestEnabled": false,
+    "python.testing.pytestEnabled": true
 }
