@@ -1,0 +1,14 @@
+{
+    "python.analysis.typeCheckingMode": "basic",
+    "[python]": {
+        "editor.defaultFormatter": "ms-python.black-formatter"
+    },
+    "python.linting.enabled": true,
+    "python.formatting.provider": "none",
+    "python.linting.pylintEnabled": true,
+    "python.createEnvironment.contentButton": "show",
+    "python.analysis.fixAll": [
+    "source.unusedImports",
+    "source.convertImportFormat",
+    ]
+}

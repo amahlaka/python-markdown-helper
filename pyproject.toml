@@ -4,14 +4,14 @@ build-backend = "hatchling.build"
 
 [project]
 name = "markdown_helper"
-version = "0.1.0"
+version = "1.0.0"
 authors = [
     { name="Arttu Mahlakaarto", email="arttu.mahlakaarto@gmail.com" },
 ]
 description = "A simple markdown helper"
 readme = "README.md"
 license = "MIT"
-requires-python = ">=3.7"
+requires-python = ">=3.10"
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",
