@@ -1,8 +1,8 @@
 """
 This file contains the pytest tests for the markdown_helper.py file.
 """
-import markdown_helper as markdown  # pylint: disable=import-error
 
+from src import markdown_helper as markdown
 
 def test_ordered_list():
     """
