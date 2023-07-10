@@ -85,7 +85,7 @@ class Table:
                 raise ValueError(
                     f"Row length ({len(row)}) does not match header length ({len(self.headers)})"
                 )
-            row = {key: value for key, value in zip(self.headers, row)}
+            row = dict(zip(self.headers, row))
         # If row is a dict, check that all the keys are in the headers, if not, raise error
         elif isinstance(row, dict):
             for key in row.keys():
