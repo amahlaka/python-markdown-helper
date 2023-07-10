@@ -109,6 +109,8 @@ class Table:
             # If multiple sort keys are provided, prioritize the first one, then the second, etc.
             sort_keys = self.sort_key.split(",")
             for sort_key in sort_keys:
+                if sort_key not in self.headers:
+                    raise ValueError(f"sort_key {sort_key} not in headers")
                 if disable_convert:
                     self.rows = sorted(
                         self.rows,
@@ -243,8 +245,10 @@ class Image:
             return self.html()
         return self.markdown()
     def __repr__(self):
-        return f"""Image(url={self.url}, title={self.title}, alt={self.alt},
-          width={self.width}, height={self.height}, align={self.align}, caption={self.caption})"""
+        return_string = f"Image(url={self.url}, title={self.title}, alt={self.alt}"
+        return_string += f", width={self.width}, height={self.height}, align={self.align},"
+        return_string +=f"caption={self.caption})"
+        return return_string
 
 
 class Link:
