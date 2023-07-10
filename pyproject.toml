@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "markdown_helper"
-version = "1.0.1"
+version = "1.0.2"
 authors = [
     { name="Arttu Mahlakaarto", email="arttu.mahlakaarto@gmail.com" },
 ]

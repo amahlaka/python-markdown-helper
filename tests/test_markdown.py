@@ -182,6 +182,26 @@ def test_table_add_row():
         {"col 1": "item 1", "col 2": "item 2", "col 3": "item 3"}
     ], "Table rows are incorrect."
 
+def test_table_add_row_no_headers():
+    """
+    This function tests the table.add_row function with a list input.
+    """
+    table_1 = markdown.Table(["col 1", "col 2", "col 3"])
+    table_1.add_row(["item 1", "item 2", "item 3"])
+    assert (
+        str(table_1)
+        == "| col 1 | col 2 | col 3 |\n| --- | --- | --- |\n| item 1 | item 2 | item 3 |\n"
+    ), "String representation of table is incorrect."
+    assert table_1.headers == [
+        "col 1",
+        "col 2",
+        "col 3",
+    ], "Table columns are incorrect."
+    assert table_1.rows == [
+        {"col 1": "item 1", "col 2": "item 2", "col 3": "item 3"}
+    ], "Table rows are incorrect."
+
+
 
 def test_table_sort():
     """

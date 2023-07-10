@@ -72,35 +72,51 @@ class Table:
         for row in rows:
             self.add_row(row)
 
-    def add_row(self, row: dict[str, str | int | float | bool]):
+    def add_row(self, row: dict[str, str | int | float | bool] | list[str]):
         """Add a row to the table.
         
         Args:
-            row (dict[str, str | int | float | bool]): Row to add
+            row (dict[str, str | int | float | bool], list[str]): Row to add
         """
 
-        # Check that all the keys in the row are in the headers
-        for key in row.keys():
-            if key not in self.headers:
-                if self.flexible_headers:
-                    self.headers.append(key)
-                else:
-                    raise ValueError(
-                        f"Key {key} not in headers and flexible_headers is False"
-                    )
+        # If row is a list, convert it to a dict, using the headers as keys, if more or less values than headers, raise error
+        if isinstance(row, list):
+            if len(row) != len(self.headers):
+                raise ValueError(
+                    f"Row length ({len(row)}) does not match header length ({len(self.headers)})"
+                )
+            row = {key: value for key, value in zip(self.headers, row)}
+        # If row is a dict, check that all the keys are in the headers, if not, raise error
+        elif isinstance(row, dict):
+            for key in row.keys():
+                if key not in self.headers:
+                    if self.flexible_headers:
+                        self.headers.append(key)
+                    else:
+                        raise ValueError(
+                            f"Key {key} not in headers and flexible_headers is False"
+                        )
         # Check that all the headers are in the row
         for header in self.headers:
             if header not in row.keys():
                 row[header] = ""
 
         self.rows.append(row)
+    
 
-    def sort_table(self):
+    def sort_table(self, disable_convert: bool = False):
         """Sort the table by the sort_key."""
         if self.sort_key:
             # If multiple sort keys are provided, prioritize the first one, then the second, etc.
             sort_keys = self.sort_key.split(",")
             for sort_key in sort_keys:
+                if disable_convert:
+                    self.rows = sorted(
+                        self.rows,
+                        key=lambda row: row.get(sort_key, ""), # pylint: disable=cell-var-from-loop
+                        reverse=self.sort_reverse,
+                    )
+                    break
                 if all( # pylint: disable=use-a-generator
                     [
                         row.get(sort_key, "")
@@ -322,7 +338,7 @@ class Section:
         self.title = title
         self.content = kwargs.get("content", "")
 
-    def add(self, content: str | Table | List | Image | Link):
+    def add(self, content: str | Table | List | Image | Link | Header):
         """Add content to the section.
 
         Args:
