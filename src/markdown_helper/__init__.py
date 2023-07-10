@@ -79,7 +79,7 @@ class Table:
             row (dict[str, str | int | float | bool], list[str]): Row to add
         """
 
-        # If row is a list, convert it to a dict, using the headers as keys, if more or less values than headers, raise error
+        # If row is a list, convert it to a dict, using the headers as keys
         if isinstance(row, list):
             if len(row) != len(self.headers):
                 raise ValueError(
@@ -102,7 +102,6 @@ class Table:
                 row[header] = ""
 
         self.rows.append(row)
-    
 
     def sort_table(self, disable_convert: bool = False):
         """Sort the table by the sort_key."""
