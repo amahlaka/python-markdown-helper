@@ -458,7 +458,6 @@ def test_document_toc():
         document_1.get_document() == "# Document 1\n## Table of Contents\n* [Section 1](#section-1)\n## Section 1\n\n" # pylint: disable=line-too-long
     ), "String representation of document is incorrect."
 
-   
 
 def test_document_save(tmp_path):
     """
